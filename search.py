@@ -86,13 +86,67 @@ def depthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    open = util.Stack()
+    open.push((problem.startState,[]))
+    closed = []
+
+    while (not open.isEmpty()):
+
+        (vertex,path) = open.pop()
+
+        if (problem.isGoalState(vertex)):
+            return path
+        
+        if (vertex not in closed):
+            closed.append(vertex)
+
+            for successor in problem.getSuccessors(vertex):
+                #if (successor[0] not in open and successor[0] not in closed):
+                # newpath = path + [successor[1]]
+                # print(successor[1])
+                # print("NewPath: ",newpath)
+                open.push((successor[0], path + [successor[1]]))
+
+
+    # from game import Directions
+    # s = Directions.SOUTH
+    # w = Directions.WEST
+    # n = Directions.NORTH
+    # e = Directions.EAST
+    # print('Actor\n')
+
+    # closed = []
+    # closed.append(problem.startState)
+
+    # print(closed)
+    # print(problem.startState in closed)
+    # print(Directions.EAST)
+    # print(problem.startState)
+    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
+    #print(problem.walls)
+    #python pacman.py -l mediumMaze -p SearchAgent
+
+    # return  [w,e,w,e,w,e,w,e,w,e,w,e,w,e,w,e]
+    # util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    open = util.Queue()
+    open.push((problem.startState,[]))
+    closed = []
+
+    while (not open.isEmpty()):
+        (vertex,path) = open.pop()
+
+        if (problem.isGoalState(vertex)):
+            return path
+
+        if (vertex not in closed):
+            closed.append(vertex)
+            for successor in problem.getSuccessors(vertex):
+                open.push((successor[0], path + [successor[1]]))
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
