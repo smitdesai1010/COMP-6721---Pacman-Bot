@@ -88,7 +88,7 @@ def depthFirstSearch(problem):
     """
 
     open = util.Stack()
-    open.push((problem.startState,[]))
+    open.push((problem.getStartState(),[]))
     closed = []
 
     while (not open.isEmpty()):
@@ -134,7 +134,7 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     open = util.Queue()
-    open.push((problem.startState,[]))
+    open.push((problem.getStartState(),[]))
     closed = []
 
     while (not open.isEmpty()):
@@ -150,7 +150,32 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
+    
+    # https://towardsdatascience.com/ai-search-algorithms-implementations-2334bfc59bf5
+    pq = util.PriorityQueue()
+    open = []
+    closed = []
+
+    pq.push((problem.getStartState(),[]),0)
+    open.append(problem.getStartState)
+
+    while (not pq.isEmpty()):
+        (vertex,path) = pq.pop()
+
+        if (problem.isGoalState(vertex)):
+            return path
+
+        if (vertex not in closed):
+            closed.append(vertex)
+            for successor in problem.getSuccessors(vertex):
+                cost = problem.getCostOfActions(path + [successor[1]])
+
+                if (successor[0] in open):
+                    pq.update((successor[0], path + [successor[1]]), cost)
+                else:
+                    pq.push((successor[0], path + [successor[1]]), cost)
+                    open.append(successor[0])
+
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
