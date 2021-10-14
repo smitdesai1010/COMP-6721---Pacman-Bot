@@ -86,6 +86,7 @@ def depthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
+    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
     open = util.Stack()
     open.push((problem.getStartState(),[]))
@@ -123,7 +124,6 @@ def depthFirstSearch(problem):
     # print(problem.startState in closed)
     # print(Directions.EAST)
     # print(problem.startState)
-    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
     #print(problem.walls)
     #python pacman.py -l mediumMaze -p SearchAgent
@@ -150,7 +150,7 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    
+
     # https://towardsdatascience.com/ai-search-algorithms-implementations-2334bfc59bf5
     pq = util.PriorityQueue()
     open = []
@@ -168,15 +168,15 @@ def uniformCostSearch(problem):
         if (vertex not in closed):
             closed.append(vertex)
             for successor in problem.getSuccessors(vertex):
-                cost = problem.getCostOfActions(path + [successor[1]])
+                successorVertex = successor[0]
+                successorPath = successor[1]
+                successorCost = problem.getCostOfActions(path + [successorPath])
 
-                if (successor[0] in open):
-                    pq.update((successor[0], path + [successor[1]]), cost)
+                if (successorVertex in open):
+                    pq.update((successorVertex, path + [successorPath]), successorCost)
                 else:
-                    pq.push((successor[0], path + [successor[1]]), cost)
-                    open.append(successor[0])
-
-    util.raiseNotDefined()
+                    pq.push((successorVertex, path + [successorPath]), successorCost)
+                    open.append(successorVertex)
 
 def nullHeuristic(state, problem=None):
     """
@@ -187,9 +187,34 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    pq = util.PriorityQueue()
+    open = {}    # Stores the open vertex and its priority/cost
+    closed = []
 
+    pq.push((problem.getStartState(),[]),0)
+    open[problem.getStartState()] = 0
+
+    while (not pq.isEmpty()):
+        (vertex,path) = pq.pop()
+
+        if (problem.isGoalState(vertex)):
+            return path
+
+        if (vertex not in closed):
+            closed.append(vertex)
+            for successor in problem.getSuccessors(vertex):
+                successorVertex = successor[0]
+                successorPath = successor[1]
+                successorCost = problem.getCostOfActions(path + [successorPath]) + heuristic(successorVertex,problem)
+
+                if (successorVertex in open and successorCost < open[successorVertex]):     #if totalcost is graeter than the current cost in the opn, then continue
+                    pq.update((successorVertex, path + [successorPath]), successorCost)
+                    open[successorVertex] = successorCost
+
+                elif (successorVertex not in open):
+                    pq.push((successorVertex, path + [successorPath]), successorCost)
+                    open[successorVertex] = successorCost
 
 # Abbreviations
 bfs = breadthFirstSearch
