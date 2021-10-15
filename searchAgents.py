@@ -287,7 +287,6 @@ class CornersProblem(search.SearchProblem):
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
         # Please add any code here which you would like to use
         # in initializing the problem
-        "*** YOUR CODE HERE ***"
         self.cornersVisted = []
 
     def getStartState(self):
@@ -295,21 +294,17 @@ class CornersProblem(search.SearchProblem):
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
         return (self.startingPosition,[])
-        util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
         if (state[0] in self.corners and state[0] not in state[1]):
             state[1].append(state[0])
 
         return len(state[1]) == 4
 
-        util.raiseNotDefined()
 
     def getSuccessors(self, state):
         """
@@ -331,7 +326,6 @@ class CornersProblem(search.SearchProblem):
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
 
-            "*** YOUR CODE HERE ***"
             visitedCorners = list(state[1])
             x,y = state[0]
             dx, dy = Actions.directionToVector(action)
@@ -375,8 +369,23 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    node = state[0]
+    visitedCorners = state[1]
+    h_sum = 0
+
+    notVisitedCorners = []
+    for i in range(4):
+        if corners[i] not in visitedCorners:
+            notVisitedCorners.append(corners[i])
+
+    cur_position = node
+    while(len(notVisitedCorners)!=0):
+        distance, corner = min( [(util.manhattanDistance(cur_position ,corner),corner) for corner in notVisitedCorners] )
+        h_sum = h_sum + distance
+        cur_position = corner
+        notVisitedCorners.remove(corner) 
+
+    return h_sum 
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -500,7 +509,7 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
 
-        "*** YOUR CODE HERE ***"
+        return search.aStarSearch(problem)
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -522,7 +531,6 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         "Stores information from the gameState.  You don't need to change this."
         # Store the food for later reference
         self.food = gameState.getFood()
-
         # Store info for the PositionSearchProblem (no need to change this)
         self.walls = gameState.getWalls()
         self.startState = gameState.getPacmanPosition()
@@ -535,7 +543,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-
+        return self.food[x][y]
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
 
