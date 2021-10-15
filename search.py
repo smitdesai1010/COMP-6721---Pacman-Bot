@@ -109,7 +109,7 @@ def depthFirstSearch(problem):
                 # print("NewPath: ",newpath)
                 open.push((successor[0], path + [successor[1]]))
 
-
+    return []
     # from game import Directions
     # s = Directions.SOUTH
     # w = Directions.WEST
@@ -147,6 +147,8 @@ def breadthFirstSearch(problem):
             closed.append(vertex)
             for successor in problem.getSuccessors(vertex):
                 open.push((successor[0], path + [successor[1]]))
+    
+    return []
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
@@ -177,6 +179,8 @@ def uniformCostSearch(problem):
                 else:
                     pq.push((successorVertex, path + [successorPath]), successorCost)
                     open.append(successorVertex)
+
+    return []
 
 def nullHeuristic(state, problem=None):
     """
@@ -215,6 +219,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 elif (successorVertex not in open):
                     pq.push((successorVertex, path + [successorPath]), successorCost)
                     open[successorVertex] = successorCost
+    
+    return []
 
 # Abbreviations
 bfs = breadthFirstSearch
