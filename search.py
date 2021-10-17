@@ -86,8 +86,6 @@ def depthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-
     open = util.Stack()
     open.push((problem.getStartState(),[]))
     closed = []
@@ -103,33 +101,9 @@ def depthFirstSearch(problem):
             closed.append(vertex)
 
             for successor in problem.getSuccessors(vertex):
-                #if (successor[0] not in open and successor[0] not in closed):
-                # newpath = path + [successor[1]]
-                # print(successor[1])
-                # print("NewPath: ",newpath)
                 open.push((successor[0], path + [successor[1]]))
 
     return []
-    # from game import Directions
-    # s = Directions.SOUTH
-    # w = Directions.WEST
-    # n = Directions.NORTH
-    # e = Directions.EAST
-    # print('Actor\n')
-
-    # closed = []
-    # closed.append(problem.startState)
-
-    # print(closed)
-    # print(problem.startState in closed)
-    # print(Directions.EAST)
-    # print(problem.startState)
-
-    #print(problem.walls)
-    #python pacman.py -l mediumMaze -p SearchAgent
-
-    # return  [w,e,w,e,w,e,w,e,w,e,w,e,w,e,w,e]
-    # util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
@@ -197,7 +171,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     closed = []
 
     pq.push((problem.getStartState(),[]),0)
-    open[problem.getStartState()] = 0
+    open[str(problem.getStartState())] = 0
 
     while (not pq.isEmpty()):
         (vertex,path) = pq.pop()
@@ -212,13 +186,13 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 successorPath = successor[1]
                 successorCost = problem.getCostOfActions(path + [successorPath]) + heuristic(successorVertex,problem)
 
-                if (successorVertex in open and successorCost < open[successorVertex]):     #if totalcost is graeter than the current cost in the opn, then continue
+                if (str(successorVertex) in open and successorCost < open[str(successorVertex)]):     #if totalcost is graeter than the current cost in the opn, then continue
                     pq.update((successorVertex, path + [successorPath]), successorCost)
-                    open[successorVertex] = successorCost
+                    open[str(successorVertex)] = successorCost
 
-                elif (successorVertex not in open):
+                elif (str(successorVertex) not in open):
                     pq.push((successorVertex, path + [successorPath]), successorCost)
-                    open[successorVertex] = successorCost
+                    open[str(successorVertex)] = successorCost
     
     return []
 

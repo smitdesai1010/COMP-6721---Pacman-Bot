@@ -369,23 +369,29 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    node = state[0]
-    visitedCorners = state[1]
-    h_sum = 0
+    position = state[0]
+    cornersVisted = state[1]
+    cornersNotVisted = []
+    ans = 0
 
-    notVisitedCorners = []
-    for i in range(4):
-        if corners[i] not in visitedCorners:
-            notVisitedCorners.append(corners[i])
+    for corner in corners: 
+        if corner not in cornersVisted:
+            cornersNotVisted.append(corner)
 
-    cur_position = node
-    while(len(notVisitedCorners)!=0):
-        distance, corner = min( [(util.manhattanDistance(cur_position ,corner),corner) for corner in notVisitedCorners] )
-        h_sum = h_sum + distance
-        cur_position = corner
-        notVisitedCorners.remove(corner) 
+    while len(cornersNotVisted) > 0 :
+        shortestCornerDistance = 999999
+        shortestCorner = None
 
-    return h_sum 
+        for corner in cornersNotVisted:
+            if (util.manhattanDistance(position,corner) < shortestCornerDistance):
+                shortestCorner = corner
+                shortestCornerDistance = util.manhattanDistance(position,corner)
+
+        ans = ans + shortestCornerDistance
+        position = shortestCorner
+        cornersNotVisted.remove(shortestCorner)
+
+    return ans 
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -510,7 +516,6 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         return search.aStarSearch(problem)
-        util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -544,8 +549,6 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         """
         x,y = state
         return self.food[x][y]
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
     """
