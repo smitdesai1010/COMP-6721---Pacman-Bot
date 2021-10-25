@@ -482,33 +482,24 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
+    #python autograder.py -q q7
     position, foodGrid = state
-    foodLeft = []
+    foodsLeft = []
     ans = 0   
 
     for food in foodGrid.asList():
-        foodLeft.append(food)
+        foodsLeft.append(food)
 
-    if len(foodLeft) == 0:
+    if len(foodsLeft) == 0:
         return 0
 
-    currFoodPosition = position
+    nearestFoodDistance = 999999
+    for food in foodsLeft:
+        tempDistance = util.manhattanDistance(position, food)
+        if tempDistance < nearestFoodDistance:
+            nearestFoodDistance = tempDistance
 
-    while len(foodLeft) > 0: 
-        nextNearestFoodDistance = 999999
-        nextNearestFood = None
-
-        for food in foodLeft:
-            tempDistance = util.manhattanDistance(currFoodPosition,food)
-            if (tempDistance < nextNearestFoodDistance):
-                nextNearestFood = food
-                nextNearestFoodDistance = tempDistance
-
-        ans = ans + nextNearestFoodDistance
-        currFoodPosition = nextNearestFood
-        foodLeft.remove(nextNearestFood)
-
-    return ans
+    return nearestFoodDistance
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
