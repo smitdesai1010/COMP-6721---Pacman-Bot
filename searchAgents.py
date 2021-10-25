@@ -376,7 +376,7 @@ def cornersHeuristic(state, problem):
 
     if len(cornersNotVisted) == 1:
         return util.manhattanDistance(position,cornersNotVisted[0])
-
+    
     while len(cornersNotVisted) > 0 :
         shortestCornerDistance = 999999
         shortestCorner = None
@@ -493,13 +493,13 @@ def foodHeuristic(state, problem):
     if len(foodsLeft) == 0:
         return 0
 
-    nearestFoodDistance = 999999
+    farthestFoodDistance = 0
     for food in foodsLeft:
         tempDistance = util.manhattanDistance(position, food)
-        if tempDistance < nearestFoodDistance:
-            nearestFoodDistance = tempDistance
+        if tempDistance > farthestFoodDistance:
+            farthestFoodDistance = tempDistance
 
-    return nearestFoodDistance
+    return farthestFoodDistance
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
