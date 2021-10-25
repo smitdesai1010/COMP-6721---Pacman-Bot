@@ -127,7 +127,6 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
 
-    # https://towardsdatascience.com/ai-search-algorithms-implementations-2334bfc59bf5
     pq = util.PriorityQueue()
     open = []
     closed = []

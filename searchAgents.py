@@ -287,7 +287,6 @@ class CornersProblem(search.SearchProblem):
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
         # Please add any code here which you would like to use
         # in initializing the problem
-        self.cornersVisted = []
 
     def getStartState(self):
         """
@@ -300,9 +299,6 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        if (state[0] in self.corners and state[0] not in state[1]):
-            state[1].append(state[0])
-
         return len(state[1]) == 4
 
 
@@ -377,6 +373,9 @@ def cornersHeuristic(state, problem):
     for corner in corners: 
         if corner not in cornersVisted:
             cornersNotVisted.append(corner)
+
+    if len(cornersNotVisted) == 1:
+        return util.manhattanDistance(position,cornersNotVisted[0])
 
     while len(cornersNotVisted) > 0 :
         shortestCornerDistance = 999999
@@ -484,30 +483,22 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-
-    foodsLeft = []
+    foodLeft = []
     ans = 0   
 
     for food in foodGrid.asList():
-        foodsLeft.append(food)
+        foodLeft.append(food)
 
-    if len(foodsLeft) == 0:
+    if len(foodLeft) == 0:
         return 0
 
-    nearestFoodDistance = 999999
-    for food in foodsLeft:
-        tempDistance = util.manhattanDistance(position, food)
-        if tempDistance < nearestFoodDistance:
-            nearestFoodDistance = tempDistance
-    
-    ans = ans + nearestFoodDistance
-    currFoodPosition = foodsLeft[0]
+    currFoodPosition = position
 
-    while len(foodsLeft) > 0: 
+    while len(foodLeft) > 0: 
         nextNearestFoodDistance = 999999
         nextNearestFood = None
-        
-        for food in foodsLeft:
+
+        for food in foodLeft:
             tempDistance = util.manhattanDistance(currFoodPosition,food)
             if (tempDistance < nextNearestFoodDistance):
                 nextNearestFood = food
@@ -515,7 +506,7 @@ def foodHeuristic(state, problem):
 
         ans = ans + nextNearestFoodDistance
         currFoodPosition = nextNearestFood
-        foodsLeft.remove(nextNearestFood)
+        foodLeft.remove(nextNearestFood)
 
     return ans
 
