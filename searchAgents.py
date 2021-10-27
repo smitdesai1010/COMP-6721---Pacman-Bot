@@ -327,11 +327,10 @@ class CornersProblem(search.SearchProblem):
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
-                if (nextx, nexty) in self.corners and (nextx, nexty) not in state[1]:
+                if (nextx, nexty) in self.corners and (nextx, nexty) not in visitedCorners:
                     visitedCorners.append((nextx, nexty))
 
-                nextState = ((nextx, nexty),visitedCorners)
-                successors.append( ( nextState, action, 1) )
+                successors.append( ( ((nextx, nexty),visitedCorners), action, 1) )
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -482,19 +481,10 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    #python autograder.py -q q7
     position, foodGrid = state
-    foodsLeft = []
-    ans = 0   
+    farthestFoodDistance = 0
 
     for food in foodGrid.asList():
-        foodsLeft.append(food)
-
-    if len(foodsLeft) == 0:
-        return 0
-
-    farthestFoodDistance = 0
-    for food in foodsLeft:
         tempDistance = util.manhattanDistance(position, food)
         if tempDistance > farthestFoodDistance:
             farthestFoodDistance = tempDistance
@@ -581,3 +571,7 @@ def mazeDistance(point1, point2, gameState):
     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
     return len(search.bfs(prob))
+
+
+#python pacman.py -l trickySearch -p AStarFoodSearchAgent
+#python pacman.py -l bigSearch -p ClosestDotSearchAgent -z .5 --frameTime 0
