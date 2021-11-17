@@ -27,7 +27,6 @@
     <li><a href="#scenario6"> ➤ Scenario 6: Admissible and Consistent Heuristic </a></li>
     <li><a href="#scenario7"> ➤ Scenario 7: Eating All Dots </a></li>
     <li><a href="#scenario8"> ➤ Scenario 8: Suboptimal Search </a></li>
-    <li><a href="#references"> ➤ References</a></li>
     <li><a href="#credits"> ➤ Credits</a></li>
   </ol>
 </details>
